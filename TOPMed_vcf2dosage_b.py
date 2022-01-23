@@ -60,10 +60,10 @@ for line in gzip.open(chrfile): #reading input file line by line
     (chr, pos, id, ref, alt, qual, filter, info, format) = arr[0:9]
     if len(ref) > 1 or len(alt) > 1: #skips indels
         continue
-    if alleles[ref] == alt or alleles[alt] == ref: #skips ambiguous snps
+    if alleles[ref] == alt: #skips ambiguous snps
         continue
 
-    if str(chr).find("chr")==-1: #updates chrID to the format "chr#" if necessary 
+    if str(chr).find("chr") == -1: #updates chrID to the format "chr#" if necessary 
         chr = "chr" + str(chr)
 
     ## updates chrX, chrXY, chrY, and chrM to their numeric versions. this section can be commented out  
@@ -80,7 +80,7 @@ for line in gzip.open(chrfile): #reading input file line by line
         chr = "chr26"
     ##
 
-    varid = str(chr) + ":" + str(pos) + ":" + str(ref) + ":" + str(alt) #name SNPs in chr:pos:ref:alt format
+    varid = chr + ":" + str(pos) + ":" + str(ref) + ":" + str(alt) #name SNPs in chr:pos:ref:alt format
 
     #getting dosages
     gt_dosagerow = arr[9:]
@@ -89,7 +89,7 @@ for line in gzip.open(chrfile): #reading input file line by line
 
     freqalt = round(sum(dosagerow)/(len(dosagerow)*2),4) #calc ALT allele frequency
     dosages = " ".join(map(str,dosagerow))
-    output = str(chr) + " " + str(varid) + " " + str(pos) + " " + str(ref) + " " + str(alt) + " " + str(freqalt) + " " + str(dosages) + "\n"
+    output = chr + " " + str(varid) + " " + str(pos) + " " + str(ref) + " " + str(alt) + " " + str(freqalt) + " " + str(dosages) + "\n"
 
     with gzip.open(chrpath + "/dosages/" + o + "." + chr + ".dosage.txt.gz", "ab") as outdosage:
         outdosage.write(output.encode("utf-8"))

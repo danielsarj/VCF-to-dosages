@@ -65,7 +65,7 @@ for line in gzip.open(chrfile): #reading input file line by line
     (chr, pos, id, ref, alt, qual, filter, info, format) = arr[0:9]
     if len(ref) > 1 or len(alt) > 1: #skips indels
         continue
-    if alleles[ref] == alt or alleles[alt] == ref: #skips ambiguous snps
+    if alleles[ref] == alt: #skips ambiguous snps
         continue
 
     if str(chr).find("chr") == -1: #updates chrID to the format "chr#" if necessary 
